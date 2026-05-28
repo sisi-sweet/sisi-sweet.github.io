@@ -1,0 +1,287 @@
+{{ define "main" }}
+<style>
+/* 標籤頁面樣式 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* 頁面標題樣式 */
+.page-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #ff6b81, #feca57);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+}
+
+.page-title::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #ff6b81, #feca57);
+  margin: 0.5rem auto 0;
+  border-radius: 2px;
+}
+
+.page-description {
+  font-size: 1.1rem;
+  color: #636e72;
+  margin-top: 1rem;
+}
+
+/* 文章卡片樣式 */
+.article-card {
+  border: none;
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  background: white;
+  position: relative;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+}
+
+.article-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #ff6b81, #feca57, #48dbfb, #ff9ff3);
+  background-size: 200% 100%;
+  animation: gradientShift 3s linear infinite;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.article-card:hover::before {
+  opacity: 1;
+}
+
+.article-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+}
+
+.article-card .card-body {
+  padding: 1.5rem;
+}
+
+.article-card .card-title a {
+  color: #2d3436;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.25rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: color 0.3s ease;
+}
+
+.article-card:hover .card-title a {
+  color: #ff6b81;
+}
+
+.article-meta {
+  font-size: 0.875rem;
+  color: #636e72;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.article-meta span {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.article-tags .badge {
+  font-weight: 500;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+  display: inline-block;
+  font-size: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.article-tags .badge:hover {
+  transform: scale(1.1);
+}
+
+.read-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #ff6b81;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+.read-more:hover {
+  color: #ff4757;
+  transform: translateX(5px);
+}
+
+.read-more i {
+  transition: transform 0.3s ease;
+}
+
+.read-more:hover i {
+  transform: translateX(5px);
+}
+
+/* 返回標籤雲按鈕 */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #ff6b81;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.back-link:hover {
+  color: #ff4757;
+  transform: translateX(-5px);
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 1.75rem;
+  }
+
+  .article-card .card-title a {
+    font-size: 1.1rem;
+  }
+
+  .article-meta {
+    font-size: 0.8rem;
+  }
+}
+
+/* 滾動動畫 */
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease-out;
+}
+
+.fade-in-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
+
+<!-- 標籤頁面標題 -->
+<div class="container py-5" style="padding-top: 100px;">
+  <div class="page-header">
+    <a href="/tags" class="back-link mb-3">
+      <i class="fas fa-arrow-left"></i> 返回標籤雲
+    </a>
+    <h1 class="page-title">#{{ .Title }}</h1>
+    <p class="page-description">找到 {{ len .Pages }} 篇相關文章</p>
+  </div>
+</div>
+
+<!-- 文章列表區塊 -->
+<div class="container pb-5">
+  {{ if gt (len .Pages) 0 }}
+    <div class="row g-4">
+      {{ range .Pages }}
+        <div class="col-md-6 col-lg-4 fade-in-up">
+          <article class="card article-card">
+            {{ if .Params.cover }}
+              <div class="position-relative">
+                <img src="{{ .Params.cover }}" alt="{{ .Title }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+              </div>
+            {{ end }}
+            <div class="card-body">
+              <div class="article-meta mb-2">
+                <span><i class="far fa-calendar-alt"></i> {{ .PublishDate.Format "2006-01-02" }}</span>
+                <span><i class="far fa-clock"></i> {{ .Params.readTime | default "1" }} 分鐘</span>
+              </div>
+              <h3 class="card-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+              {{ if .Params.tags }}
+                <div class="article-tags">
+                  {{ range first 3 .Params.tags }}
+                    <a href="/tags/{{ . | urlize }}/" class="badge bg-light text-dark">#{{ . }}</a>
+                  {{ end }}
+                </div>
+              {{ end }}
+              <p class="card-text">{{ .Plain | truncate 100 }}</p>
+              <a href="{{ .RelPermalink }}" class="read-more">閱讀更多 <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </article>
+        </div>
+      {{ end }}
+    </div>
+  {{ else }}
+    <div class="col-12">
+      <div class="card" style="text-align: center; padding: 3rem;">
+        <div style="font-size: 4rem; margin-bottom: 1rem;">🔍</div>
+        <h3>目前沒有標記為「{{ .Title }}」的文章</h3>
+        <p>探索其他標籤或回首页看看更多內容吧！</p>
+        <a href="/tags" class="read-more">查看其他標籤 <i class="fas fa-tags"></i></a>
+      </div>
+    </div>
+  {{ end }}
+</div>
+
+<script>
+// 頁面載入後添加滾動動畫
+document.addEventListener('DOMContentLoaded', function() {
+  // 淡入動畫
+  setTimeout(function() {
+    document.querySelectorAll('.fade-in-up').forEach(function(element) {
+      element.classList.add('visible');
+    });
+  }, 100);
+
+  // 滾動時觸發動畫
+  function checkScroll() {
+    const elements = document.querySelectorAll('.fade-in-up');
+    const windowHeight = window.innerHeight;
+
+    elements.forEach(function(element) {
+      const elementTop = element.getBoundingClientRect().top;
+      if (elementTop < windowHeight - 100) {
+        element.classList.add('visible');
+      }
+    });
+  }
+
+  window.addEventListener('scroll', checkScroll);
+  checkScroll(); // 初始檢查
+});
+</script>
+{{ end }}

@@ -1,0 +1,384 @@
+{{ define "main" }}
+{{ $isTags := eq $.Data.Plural "tags" }}
+
+<!-- 标签云页面 -->
+{{ if $isTags }}
+<style>
+/* 标签云页面样式 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 页面标题样式 */
+.page-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #ff6b81, #feca57);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+  margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+  font-size: 1rem;
+  color: #636e72;
+}
+
+/* 标签云容器 */
+.tag-cloud-wrapper {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 24px;
+  padding: 3rem 2rem;
+  min-height: 400px;
+}
+
+/* 标签云 */
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* 标签样式 */
+.tag-item {
+  text-decoration: none;
+  padding: 0.6rem 1.4rem;
+  border-radius: 50px;
+  background: white;
+  color: #2d3436;
+  font-weight: 600;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.tag-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  border-radius: 50px 0 0 50px;
+}
+
+/* 标签颜色 */
+.tag-item:nth-child(5n+1) { border-left-color: #ff6b81; }
+.tag-item:nth-child(5n+1)::before { background: linear-gradient(180deg, #ff6b81, #ee5a6b); }
+
+.tag-item:nth-child(5n+2) { border-left-color: #feca57; }
+.tag-item:nth-child(5n+2)::before { background: linear-gradient(180deg, #feca57, #f9ca46); }
+
+.tag-item:nth-child(5n+3) { border-left-color: #48dbfb; }
+.tag-item:nth-child(5n+3)::before { background: linear-gradient(180deg, #48dbfb, #0abde3); }
+
+.tag-item:nth-child(5n+4) { border-left-color: #ff9ff3; }
+.tag-item:nth-child(5n+4)::before { background: linear-gradient(180deg, #ff9ff3, #f368e0); }
+
+.tag-item:nth-child(5n+5) { border-left-color: #a55eea; }
+.tag-item:nth-child(5n+5)::before { background: linear-gradient(180deg, #a55eea, #8854d0); }
+
+.tag-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.tag-label {
+  position: relative;
+  z-index: 1;
+}
+
+.tag-count {
+  margin-left: 0.5rem;
+  color: #636e72;
+  font-weight: 500;
+  font-size: 0.8rem;
+}
+
+/* 大标签 */
+.tag-item.level-large {
+  font-size: 1.1rem;
+  padding: 0.8rem 1.8rem;
+}
+
+.tag-item.level-large .tag-count {
+  font-size: 0.9rem;
+}
+
+/* 中等标签 */
+.tag-item.level-medium {
+  font-size: 1rem;
+  padding: 0.7rem 1.5rem;
+}
+
+/* 小标签 */
+.tag-item.level-small {
+  font-size: 0.85rem;
+  padding: 0.5rem 1.2rem;
+}
+
+/* 无标签提示 */
+.no-tags {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #636e72;
+}
+
+.no-tags-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 2rem;
+  }
+
+  .tag-cloud-wrapper {
+    padding: 2rem 1.5rem;
+  }
+
+  .tag-cloud {
+    gap: 0.8rem;
+  }
+
+  .tag-item {
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .tag-item.level-large {
+    font-size: 0.95rem;
+    padding: 0.6rem 1.2rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .tag-cloud {
+    justify-content: flex-start;
+  }
+
+  .tag-item {
+    font-size: 0.8rem;
+    padding: 0.45rem 0.9rem;
+  }
+}
+</style>
+
+<!-- 标签云页面标题 -->
+<div class="container py-5" style="padding-top: 100px;">
+  <div class="page-header">
+    <h1 class="page-title">標籤雲</h1>
+    <p class="page-subtitle">探索所有標籤，找到你感興趣的主題</p>
+  </div>
+</div>
+
+<!-- 标签云区域 -->
+<div class="container">
+  <div class="tag-cloud-wrapper">
+    {{ if gt (len .Site.Taxonomies.tags) 0 }}
+    <div class="tag-cloud">
+      {{ range $name, $taxonomy := .Site.Taxonomies.tags }}
+      {{ $count := len $taxonomy }}
+      {{ if ge $count 6 }}
+      <a href="/tags/{{ $name | urlize }}/" class="tag-item level-large">
+        <span class="tag-label">{{ $name }}</span>
+        <span class="tag-count">{{ $count }}</span>
+      </a>
+      {{ else if ge $count 3 }}
+      <a href="/tags/{{ $name | urlize }}/" class="tag-item level-medium">
+        <span class="tag-label">{{ $name }}</span>
+        <span class="tag-count">{{ $count }}</span>
+      </a>
+      {{ else }}
+      <a href="/tags/{{ $name | urlize }}/" class="tag-item level-small">
+        <span class="tag-label">{{ $name }}</span>
+        <span class="tag-count">{{ $count }}</span>
+      </a>
+      {{ end }}
+      {{ end }}
+    </div>
+    {{ else }}
+    <div class="no-tags">
+      <div class="no-tags-icon">🏷️</div>
+      <p>目前還沒有標籤，敬請期待！</p>
+    </div>
+    {{ end }}
+  </div>
+</div>
+
+{{ else }}
+<!-- 分类浏览页面 -->
+<style>
+/* 分类浏览页面样式 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 页面标题样式 */
+.page-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #ff6b81, #feca57);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+}
+
+/* 分类卡片样式 */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.category-card {
+  background: white;
+  border-radius: 20px;
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.category-card:hover {
+  transform: translateY(-10px) scale(1.05);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+}
+
+.category-icon {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 1.2rem;
+  background: linear-gradient(135deg, #ff6b81, #feca57);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.category-card:nth-child(1) .category-icon { background: linear-gradient(135deg, #ff6b81, #feca57); }
+.category-card:nth-child(2) .category-icon { background: linear-gradient(135deg, #48dbfb, #0abde3); }
+.category-card:nth-child(3) .category-icon { background: linear-gradient(135deg, #ff9ff3, #f368e0); }
+.category-card:nth-child(4) .category-icon { background: linear-gradient(135deg, #a55eea, #8854d0); }
+.category-card:nth-child(5) .category-icon { background: linear-gradient(135deg, #00d2d3, #54a0ff); }
+
+.category-card:hover .category-icon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.category-title {
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #2d3436;
+  font-size: 1.25rem;
+}
+
+.category-description {
+  font-size: 0.9rem;
+  color: #636e72;
+  margin-bottom: 0;
+}
+
+.category-count {
+  display: inline-block;
+  margin-top: 0.8rem;
+  padding: 0.3rem 0.8rem;
+  background: #f8f9fa;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  color: #636e72;
+  font-weight: 500;
+}
+
+/* 区块背景 */
+.category-section {
+  padding: 60px 0;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  position: relative;
+}
+</style>
+
+<!-- 分类页面标题 -->
+<div class="container py-5" style="padding-top: 100px;">
+  <div class="page-header">
+    <h1 class="page-title">分類瀏覽</h1>
+  </div>
+</div>
+
+<!-- 分类卡片区块 -->
+<div class="category-section">
+  <div class="container">
+    <div class="category-grid">
+      {{ range $name, $taxonomy := .Site.Taxonomies.categories }}
+      {{ $term := $.Site.GetPage (printf "/categories/%s" $name) }}
+      {{ if $term }}
+      <a href="{{ $term.RelPermalink }}" class="category-card fade-in-up">
+        <div class="category-icon">{{ $term.Params.icon | default "📁" }}</div>
+        <h4 class="category-title">{{ $term.Title | default $name }}</h4>
+        <p class="category-description">{{ $term.Params.description | default $term.Description | default "探索更多內容" }}</p>
+        {{ if gt (len $taxonomy) 0 }}
+        <span class="category-count">{{ len $taxonomy }} 篇文章</span>
+        {{ end }}
+      </a>
+      {{ end }}
+      {{ end }}
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  setTimeout(function() {
+    document.querySelectorAll('.fade-in-up').forEach(function(element) {
+      element.classList.add('visible');
+    });
+  }, 100);
+});
+</script>
+{{ end }}
+{{ end }}

@@ -1,0 +1,523 @@
+{{ define "main" }}
+<style>
+/* 搜尋頁面樣式 */
+.search-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.search-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.search-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  background: linear-gradient(90deg, #ff6b81, #feca57);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.search-box-wrapper {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.search-input {
+  width: 100%;
+  padding: 1rem 3rem 1rem 1.5rem;
+  font-size: 1.1rem;
+  border: 2px solid #e9ecef;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #ff6b81;
+  box-shadow: 0 0 0 4px rgba(255, 107, 129, 0.1);
+}
+
+.search-icon {
+  position: absolute;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #636e72;
+}
+
+.search-clear {
+  position: absolute;
+  right: 3.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #636e72;
+  cursor: pointer;
+  display: none;
+}
+
+.search-clear:hover {
+  color: #ff6b81;
+}
+
+/* 搜尋結果樣式 */
+.search-results {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.search-result-card {
+  border: none;
+  border-radius: 15px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+}
+
+.search-result-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+}
+
+.search-result-card .card-body {
+  padding: 1.5rem;
+}
+
+.search-result-titles {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.search-result-title a {
+  color: #2d3436;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.search-result-title a:hover {
+  color: #ff6b81;
+}
+
+.search-result-meta {
+  font-size: 0.875rem;
+  color: #636e72;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.search-result-meta span {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.search-result-content {
+  color: #636e72;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.search-result-tags {
+  margin-bottom: 0.75rem;
+}
+
+.search-result-tags .badge {
+  font-weight: 500;
+  padding: 0.35rem 0.7rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  margin-right: 0.5rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.search-result-tags .badge:hover {
+  transform: scale(1.1);
+}
+
+.search-result-highlight {
+  background-color: #fff3cd;
+  padding: 0 0.2rem;
+  border-radius: 3px;
+}
+
+.no-results {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #636e72;
+}
+
+.no-results-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.loading-spinner {
+  display: none;
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  margin: 0 auto;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #ff6b81;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+  .search-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .search-input {
+    font-size: 1rem;
+    padding: 0.875rem 2.5rem 0.875rem 1rem;
+  }
+}
+</style>
+
+<div class="container">
+  <div class="search-container">
+    <div class="search-header">
+      <h1>🔍 搜尋文章</h1>
+      <p class="text-muted">輸入關鍵字，快速找到你想看的文章</p>
+    </div>
+
+    <div class="search-box-wrapper">
+      <input
+        type="text"
+        id="searchInput"
+        class="search-input"
+        placeholder="搜尋關鍵字..."
+        autocomplete="off"
+      >
+      <span class="search-icon"><i class="fas fa-search"></i></span>
+      <button id="searchClear" class="search-clear">✕</button>
+    </div>
+
+    <div class="loading-spinner" id="loadingSpinner">
+      <div class="spinner"></div>
+      <p class="mt-3 text-muted">載入搜尋索引中...</p>
+    </div>
+
+    <div id="searchResults" class="search-results"></div>
+
+    <div id="noResults" class="no-results" style="display: none;">
+      <div class="no-results-icon">🔍</div>
+      <h3>找不到相關文章</h3>
+      <p>試試看其他關鍵字，或者直接瀏覽分類頁面</p>
+      <a href="/categories" class="btn btn-outline-primary mt-3">瀏覽分類</a>
+    </div>
+
+    <div id="initialState" class="no-results">
+      <div class="no-results-icon">📝</div>
+      <h3>輸入關鍵字開始搜尋</h3>
+      <p>可以搜尋文章標題、內容、標籤或作者</p>
+    </div>
+  </div>
+</div>
+
+<script>
+// 搜尋功能
+(function() {
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  const searchClear = document.getElementById('searchClear');
+  const noResults = document.getElementById('noResults');
+  const initialState = document.getElementById('initialState');
+  const loadingSpinner = document.getElementById('loadingSpinner');
+
+  let searchIndex = null;
+  let searchTimeout = null;
+
+  // 載入搜尋索引
+  async function loadSearchIndex() {
+    try {
+      loadingSpinner.style.display = 'block';
+      initialState.style.display = 'none';
+
+      const response = await fetch('/index.json');
+      if (!response.ok) {
+        throw new Error('無法載入搜尋索引');
+      }
+      searchIndex = await response.json();
+      loadingSpinner.style.display = 'none';
+
+      // 如果 URL 有查詢參數，執行搜尋
+      const urlParams = new URLSearchParams(window.location.search);
+      const query = urlParams.get('q');
+      if (query) {
+        searchInput.value = query;
+        performSearch(query);
+      } else {
+        initialState.style.display = 'block';
+      }
+    } catch (error) {
+      console.error('載入搜尋索引失敗:', error);
+      loadingSpinner.innerHTML = `
+        <div class="no-results">
+          <div class="no-results-icon">❌</div>
+          <h3>載入搜尋功能失敗</h3>
+          <p>請稍後再試或重新整理頁面</p>
+        </div>
+      `;
+    }
+  }
+
+  // 執行搜尋
+  function performSearch(query) {
+    if (!searchIndex || !query.trim()) {
+      showInitialState();
+      return;
+    }
+
+    const keywords = query.toLowerCase().trim();
+    const results = [];
+
+    for (const item of searchIndex) {
+      let score = 0;
+      let matchedFields = [];
+
+      // 搜尋標題（權重最高）
+      if (item.title && item.title.toLowerCase().includes(keywords)) {
+        score += 10;
+        matchedFields.push('title');
+      }
+
+      // 搜尋內容
+      if (item.content && item.content.toLowerCase().includes(keywords)) {
+        score += 3;
+        matchedFields.push('content');
+      }
+
+      // 搜尋標籤
+      if (item.tags && item.tags.some(tag => tag.toLowerCase().includes(keywords))) {
+        score += 5;
+        matchedFields.push('tags');
+      }
+
+      // 搜尋作者
+      if (item.authors && item.authors.some(author => author.toLowerCase().includes(keywords))) {
+        score += 4;
+        matchedFields.push('authors');
+      }
+
+      // 搜尋分類
+      if (item.categories && item.categories.some(cat => cat.toLowerCase().includes(keywords))) {
+        score += 3;
+        matchedFields.push('categories');
+      }
+
+      if (score > 0) {
+        results.push({
+          ...item,
+          score,
+          matchedFields
+        });
+      }
+    }
+
+    // 依照分數排序
+    results.sort((a, b) => b.score - a.score);
+
+    // 根據 permalink 去重（保留分數最高的）
+    const seenPermalinks = new Set();
+    const uniqueResults = [];
+    for (const result of results) {
+      if (!seenPermalinks.has(result.permalink)) {
+        seenPermalinks.add(result.permalink);
+        uniqueResults.push(result);
+      }
+    }
+
+    displayResults(uniqueResults, keywords);
+  }
+
+  // 顯示搜尋結果
+  function displayResults(results, keywords) {
+    if (results.length === 0) {
+      searchResults.innerHTML = '';
+      noResults.style.display = 'block';
+      initialState.style.display = 'none';
+      searchClear.style.display = 'none';
+      return;
+    }
+
+    noResults.style.display = 'none';
+    initialState.style.display = 'none';
+    searchClear.style.display = 'block';
+
+    const html = results.map(item => {
+      // 產生標籤 HTML
+      const tagsHtml = item.tags
+        ? item.tags.slice(0, 5).map(tag =>
+            `<a href="/tags/${encodeURIComponent(tag)}" class="badge bg-light text-dark">#${highlightKeyword(tag, keywords)}</a>`
+          ).join('')
+        : '';
+
+      // 產生作者 HTML
+      const authorHtml = item.authors
+        ? i18n_author_html(item.authors[0], keywords)
+        : `<span><i class="fas fa-user"></i> 思思</span>`;
+
+      // 產生內容摘要
+      const contentTruncated = truncateContent(item.content, 150, keywords);
+
+      return `
+        <article class="card search-result-card">
+          <div class="card-body">
+            <h3 class="search-result-titles">
+              <a href="${item.permalink}">${highlightKeyword(item.title, keywords)}</a>
+            </h3>
+            <div class="search-result-meta">
+              <span><i class="far fa-calendar-alt"></i> ${item.date || ''}</span>
+              ${authorHtml}
+            </div>
+            <div class="search-result-tags">${tagsHtml}</div>
+            <div class="search-result-content">${contentTruncated}</div>
+            <a href="${item.permalink}" class="read-more">
+              閱讀更多 <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+        </article>
+      `;
+    }).join('');
+
+    searchResults.innerHTML = `<div class="search-results">${html}</div>`;
+  }
+
+  // 高亮關鍵字
+  function highlightKeyword(text, keywords) {
+    if (!text) return '';
+    const regex = new RegExp(`(${escapeRegExp(keywords)})`, 'gi');
+    return text.replace(regex, '<span class="search-result-highlight">$1</span>');
+  }
+
+  // 截斷內容並保留關鍵字附近
+  function truncateContent(content, maxLength, keywords) {
+    if (!content) return '';
+
+    const lowerContent = content.toLowerCase();
+    const lowerKeywords = keywords.toLowerCase();
+
+    // 找到關鍵字第一次出現的位置
+    const keywordIndex = lowerContent.indexOf(lowerKeywords);
+
+    let truncated = '';
+    if (keywordIndex === -1) {
+      // 沒有關鍵字，截取前面
+      truncated = content.substring(0, maxLength);
+    } else {
+      // 從關鍵字前面開始截取
+      const start = Math.max(0, keywordIndex - 50);
+      const end = Math.min(content.length, start + maxLength);
+      truncated = content.substring(start, end);
+
+      // 如果不是從開頭開始，加上省略號
+      if (start > 0) {
+        truncated = '...' + truncated;
+      }
+
+      // 如果不是結尾，加上省略號
+      if (end < content.length) {
+        truncated = truncated + '...';
+      }
+    }
+
+    return highlightKeyword(truncated, keywords);
+  }
+
+  // Escape 正則特殊字元
+  function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  // 顯示初始狀態
+  function showInitialState() {
+    searchResults.innerHTML = '';
+    noResults.style.display = 'none';
+    initialState.style.display = 'block';
+    searchClear.style.display = 'none';
+  }
+
+  // 產生作者 HTML
+  function i18n_author_html(author, keywords) {
+    return `<span><i class="fas fa-user"></i> ${highlightKeyword(author, keywords)}</span>`;
+  }
+
+  // 防抖函數
+  function debounce(func, wait) {
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(searchTimeout);
+        func(...args);
+      };
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(later, wait);
+    };
+  }
+
+  // 事件監聽
+  searchInput.addEventListener('input', debounce(function(e) {
+    const query = e.target.value;
+    if (query.trim()) {
+      performSearch(query);
+      // 更新 URL
+      const url = new URL(window.location);
+      url.searchParams.set('q', query);
+      window.history.replaceState({}, '', url);
+    } else {
+      showInitialState();
+      // 清除 URL 參數
+      const url = new URL(window.location);
+      url.searchParams.delete('q');
+      window.history.replaceState({}, '', url);
+    }
+  }, 300));
+
+  searchClear.addEventListener('click', function() {
+    searchInput.value = '';
+    showInitialState();
+    searchInput.focus();
+    const url = new URL(window.location);
+    url.searchParams.delete('q');
+    window.history.replaceState({}, '', url);
+  });
+
+  // 支援 Enter 鍵搜尋
+  searchInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const query = searchInput.value;
+      if (query.trim()) {
+        performSearch(query);
+      }
+    }
+  });
+
+  // 頁面載入時取得搜尋索引
+  loadSearchIndex();
+})();
+</script>
+{{ end }}

@@ -1,0 +1,12 @@
+name = "Sissi"
+license = "MIT"
+licenselink = ""
+description = "思思實驗室自定義主題"
+homepage = ""
+tags = []
+features = []
+min_version = "0.112.0"
+
+[author]
+  name = "思思"
+  homepage = ""

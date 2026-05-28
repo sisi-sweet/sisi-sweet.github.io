@@ -1,0 +1,277 @@
+{{ define "main" }}
+<div class="container">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/">首頁</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ .Title }}</li>
+    </ol>
+  </nav>
+
+  <div class="row">
+    <!-- 左側：主要文章內容 -->
+    <div class="col-lg-8">
+      <article itemscope itemtype="http://schema.org/Article">
+        <header class="article-header">
+          <h1 class="article-title" itemprop="headline">{{ .Title }}</h1>
+          
+          <div class="article-meta">
+            <span class="article-author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+              <i class="fas fa-user"></i> 
+              <span itemprop="name">{{ .Site.Params.author }}</span>
+            </span>
+            <span class="article-date">
+              <i class="far fa-calendar"></i> 
+              <time itemprop="datePublished" datetime="{{ .PublishDate.Format "2006-01-02" }}">
+                {{ .PublishDate.Format "2006-01-02" }}
+              </time>
+            </span>
+            <span class="article-read-time">
+              <i class="far fa-clock"></i> 
+              {{ .ReadingTime }} 分鐘閱讀
+            </span>
+            {{ if .Lastmod }}
+            <span class="article-updated">
+              <i class="fas fa-edit"></i> 
+              <time itemprop="dateModified" datetime="{{ .Lastmod.Format "2006-01-02" }}">
+                更新於 {{ .Lastmod.Format "2006-01-02" }}
+              </time>
+            </span>
+            {{ end }}
+          </div>
+
+          {{ if .Params.featuredImage }}
+          <div class="article-image">
+            <img src="{{ .Params.featuredImage }}" alt="{{ .Title }}" class="img-fluid" itemprop="image">
+          </div>
+          {{ end }}
+
+          {{ if .Params.categories }}
+          <div class="article-categories">
+            {{ range .Params.categories }}
+            <a href="/categories/{{ . | urlize }}" class="badge bg-primary">{{ . }}</a>
+            {{ end }}
+          </div>
+          {{ end }}
+
+          {{ if .Params.tags }}
+          <div class="article-tags">
+            {{ range .Params.tags }}
+            <a href="/tags/{{ . | urlize }}" class="badge bg-secondary">{{ . }}</a>
+            {{ end }}
+          </div>
+          {{ end }}
+        </header>
+
+        <div class="article-content" itemprop="articleBody">
+          {{ .Content }}
+        </div>
+
+        <footer class="article-footer">
+          {{ if .Params.momoLink }}
+          <div class="product-cta">
+            <a href="{{ .Params.momoLink }}" class="btn btn-primary btn-lg product-btn" target="_blank" rel="noopener noreferrer">
+              <i class="fas fa-shopping-cart"></i> 前往 MOMO 購買
+            </a>
+          </div>
+          {{ end }}
+
+          <div class="share-buttons">
+            <h4>分享這篇文章：</h4>
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ .Permalink }}" class="btn btn-outline-primary" target="_blank" rel="noopener noreferrer">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="https://twitter.com/intent/tweet?url={{ .Permalink }}&text={{ .Title }}" class="btn btn-outline-info" target="_blank" rel="noopener noreferrer">
+              <i class="fab fa-twitter"></i>
+            </a>
+            <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ .Permalink }}&title={{ .Title }}" class="btn btn-outline-primary" target="_blank" rel="noopener noreferrer">
+              <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a href="https://line.me/R/msg/text/?{{ .Title }}{{ .Permalink }}" class="btn btn-outline-success" target="_blank" rel="noopener noreferrer">
+              <i class="fab fa-line"></i>
+            </a>
+          </div>
+
+          {{ if .Params.categories }}
+          <div class="related-articles-section">
+            <h3>相關文章</h3>
+            <div class="row">
+              {{ $related := first 3 (where (where .Site.RegularPages "Section" "in" (slice "3c-reviews" "home-living" "beauty" "food" "pets" "fitness" "clothing")) "Permalink" "!=" .Permalink).ByDate.Reverse }}
+              {{ range $related }}
+              <div class="col-md-4 mb-3">
+                <div class="related-article-card">
+                  <a href="{{ .Permalink }}" class="related-article-link">
+                    {{ if .Params.featuredImage }}
+                    <img src="{{ .Params.featuredImage }}" alt="{{ .Title }}" class="related-article-image">
+                    {{ end }}
+                    <h4>{{ .Title }}</h4>
+                    <small>{{ .PublishDate.Format "2006-01-02" }}</small>
+                  </a>
+                </div>
+              </div>
+              {{ end }}
+            </div>
+          </div>
+          {{ end }}
+        </footer>
+      </article>
+    </div>
+
+    <!-- 右側：廣告空間 + 其他文章 -->
+    <div class="col-lg-4">
+      <!-- 廣告空間預留 -->
+      <aside class="sidebar-ad-space">
+        <div class="ad-placeholder">
+          <div class="ad-box">
+            <div class="ad-content">
+              <span class="ad-label">廣告</span>
+              <p>廣告空間 A</p>
+              <small class="text-muted">寬度：100% | 高度：250px</small>
+            </div>
+          </div>
+        </div>
+        <div class="ad-placeholder">
+          <div class="ad-box">
+            <div class="ad-content">
+              <span class="ad-label">廣告</span>
+              <p>廣告空間 B</p>
+              <small class="text-muted">寬度：100% | 高度：250px</small>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- 其他文章推薦 -->
+      <aside class="sidebar-articles">
+        <h4 class="sidebar-title">熱門文章</h4>
+        <div class="sidebar-article-list">
+          {{ $excludedSlugs := (slice "disclaimer" "about") }}
+          {{ $popular := where .Site.RegularPages.ByDate.Reverse "Kind" "page" }}
+          {{ range first 10 $popular }}
+          {{ if and (ne .Permalink $.Permalink) (not (in $excludedSlugs .File.BaseFileName)) }}
+          <div class="sidebar-article-item">
+            {{ if .Params.featuredImage }}
+            <a href="{{ .Permalink }}" class="sidebar-article-link">
+              <img src="{{ .Params.featuredImage }}" alt="{{ .Title }}" class="sidebar-article-thumb">
+            </a>
+            {{ end }}
+            <div class="sidebar-article-info">
+              <a href="{{ .Permalink }}">
+                <h5>{{ .Title }}</h5>
+              </a>
+              <small class="text-muted">{{ .PublishDate.Format "2006-01-02" }}</small>
+            </div>
+          </div>
+          {{ end }}
+          {{ end }}
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* 右側欄位樣式 */
+  .sidebar-ad-space {
+    margin-bottom: 2rem;
+  }
+
+  .ad-placeholder {
+    margin-bottom: 1.5rem;
+  }
+
+  .ad-box {
+    background: #f8f9fa;
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+    padding: 1rem;
+    min-height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ad-content {
+    text-align: center;
+  }
+
+  .ad-label {
+    background: #ccc;
+    color: #666;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+  }
+
+  .ad-content p {
+    margin: 0;
+    font-weight: 600;
+    color: #999;
+  }
+
+  /* 側邊欄文章樣式 */
+  .sidebar-articles {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.5rem;
+  }
+
+  .sidebar-title {
+    border-bottom: 2px solid #0d6efd;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+  }
+
+  .sidebar-article-list {
+  }
+
+  .sidebar-article-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid #dee2e6;
+  }
+
+  .sidebar-article-item:last-child {
+    border-bottom: none;
+  }
+
+  .sidebar-article-link {
+    flex-shrink: 0;
+    width: 80px;
+    height: 60px;
+    overflow: hidden;
+    border-radius: 4px;
+  }
+
+  .sidebar-article-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .sidebar-article-info h5 {
+    margin: 0 0 0.25rem 0;
+    font-size: 0.95rem;
+    line-height: 1.3;
+  }
+
+  .sidebar-article-info a {
+    text-decoration: none;
+    color: #212529;
+  }
+
+  .sidebar-article-info a:hover {
+    color: #0d6efd;
+  }
+
+  /* 響應式調整 */
+  @media (max-width: 991px) {
+    .col-lg-8, .col-lg-4 {
+      width: 100%;
+    }
+  }
+</style>
+{{ end }}

@@ -1,0 +1,295 @@
+{{ define "main" }}
+<style>
+/* 動態 Category 頁面樣式 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* 頁面標題樣式 */
+.page-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #ff6b81, #feca57);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+}
+
+.page-title::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #ff6b81, #feca57);
+  margin: 0.5rem auto 0;
+  border-radius: 2px;
+}
+
+.page-description {
+  font-size: 1.1rem;
+  color: #636e72;
+  margin-top: 1rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 分類卡片樣式 */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.category-card {
+  background: white;
+  border-radius: 20px;
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.category-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 0;
+  background: linear-gradient(90deg, #ff6b81, #feca57);
+  transition: height 0.3s ease;
+  z-index: 0;
+}
+
+.category-card:hover {
+  transform: translateY(-10px) scale(1.05);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+}
+
+.category-icon {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 1.2rem;
+  background: linear-gradient(135deg, #ff6b81, #feca57);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: white;
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+
+.category-card:nth-child(2) .category-icon {
+  background: linear-gradient(135deg, #48dbfb, #0abde3);
+}
+
+.category-card:nth-child(3) .category-icon {
+  background: linear-gradient(135deg, #ff9ff3, #f368e0);
+}
+
+.category-card:nth-child(4) .category-icon {
+  background: linear-gradient(135deg, #a55eea, #8854d0);
+}
+
+.category-card:nth-child(5) .category-icon {
+  background: linear-gradient(135deg, #00d2d3, #54a0ff);
+}
+
+.category-card:nth-child(6) .category-icon {
+  background: linear-gradient(135deg, #ff6b6b, #ee5253);
+}
+
+.category-card:nth-child(7) .category-icon {
+  background: linear-gradient(135deg, #1dd1a1, #10ac84);
+}
+
+.category-card:nth-child(8) .category-icon {
+  background: linear-gradient(135deg, #feca57, #ff9f43);
+}
+
+.category-card:hover .category-icon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.category-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.category-card h4 {
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #2d3436;
+  font-size: 1.2rem;
+}
+
+.category-card p {
+  font-size: 0.9rem;
+  color: #636e72;
+  margin-bottom: 0;
+}
+
+.category-count {
+  display: inline-block;
+  margin-top: 0.8rem;
+  padding: 0.3rem 0.8rem;
+  background: #f8f9fa;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  color: #636e72;
+  font-weight: 500;
+}
+
+/* 區塊背景 */
+.category-section {
+  padding: 60px 0;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.category-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(255,107,129,0.1) 0%, transparent 70%);
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 1.75rem;
+  }
+
+  .category-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+
+  .category-card {
+    padding: 1.5rem 1rem;
+  }
+
+  .category-icon {
+    width: 55px;
+    height: 55px;
+    font-size: 1.5rem;
+  }
+
+  .category-card h4 {
+    font-size: 1rem;
+  }
+
+  .category-card p {
+    font-size: 0.8rem;
+  }
+}
+
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease-out;
+}
+
+.fade-in-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
+
+<!-- 分類頁面標題 -->
+<div class="container py-5" style="padding-top: 100px;">
+  <div class="page-header">
+    <h1 class="page-title">{{ .Title }}</h1>
+    {{ if .Description }}
+    <p class="page-description">{{ .Description }}</p>
+    {{ end }}
+  </div>
+</div>
+
+<!-- 分類卡片區塊 -->
+<div class="category-section">
+  <div class="container">
+    {{ if .Content }}
+    <div class="page-content mb-5">
+      {{ .Content }}
+    </div>
+    {{ end }}
+
+    <div class="category-grid">
+      {{ range $name, $taxonomy := .Site.Taxonomies.categories }}
+      {{ $term := $.Site.GetPage (printf "/categories/%s" $name) }}
+      {{ if $term }}
+      <a href="{{ $term.RelPermalink }}" class="category-card fade-in-up">
+        <div class="category-icon">{{ $term.Params.icon | default "📁" }}</div>
+        <h4>{{ $term.Title | default $name }}</h4>
+        <p>{{ $term.Params.description | default $term.Description | default "探索更多內容" }}</p>
+        {{ if gt (len $taxonomy) 0 }}
+        <span class="category-count">{{ len $taxonomy }} 篇文章</span>
+        {{ end }}
+      </a>
+      {{ end }}
+      {{ end }}
+    </div>
+  </div>
+</div>
+
+<script>
+// 頁面載入後添加滾動動畫
+document.addEventListener('DOMContentLoaded', function() {
+  setTimeout(function() {
+    document.querySelectorAll('.fade-in-up').forEach(function(element) {
+      element.classList.add('visible');
+    });
+  }, 100);
+
+  function checkScroll() {
+    const elements = document.querySelectorAll('.fade-in-up');
+    const windowHeight = window.innerHeight;
+
+    elements.forEach(function(element) {
+      const elementTop = element.getBoundingClientRect().top;
+      if (elementTop < windowHeight - 100) {
+        element.classList.add('visible');
+      }
+    });
+  }
+
+  window.addEventListener('scroll', checkScroll);
+  checkScroll();
+});
+</script>
+{{ end }}

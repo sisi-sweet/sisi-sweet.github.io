@@ -1,0 +1,421 @@
+<style>
+    /* Footer 樣式 */
+    .site-footer {
+        background: linear-gradient(135deg, #1e272e 0%, #353b48 100%);
+        color: #f5f6fa;
+        padding: 3rem 0 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .site-footer::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #ff6b81, #feca57, #48dbfb);
+    }
+
+    /* 浮動裝飾 */
+    .footer-decoration {
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0.03;
+        pointer-events: none;
+    }
+
+    .footer-decoration-1 {
+        width: 250px;
+        height: 250px;
+        background: #ff6b81;
+        top: -80px;
+        right: -80px;
+    }
+
+    .footer-decoration-2 {
+        width: 180px;
+        height: 180px;
+        background: #48dbfb;
+        bottom: 80px;
+        left: -40px;
+    }
+
+    /* 主內容區 */
+    .footer-main {
+        padding-bottom: 2.5rem;
+        margin-bottom: 0;
+    }
+
+    .footer-main > .row > div {
+        margin-bottom: 2rem;
+    }
+
+    /* Footer 區塊 */
+    .footer-section {
+        height: auto;
+        margin-bottom: 1.25rem;
+    }
+
+    /* Footer 標題 */
+    .footer-section h4 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0.85rem;
+        color: #fff;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        position: relative;
+        padding-bottom: 0.6rem;
+    }
+
+    .footer-section h4::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 35px;
+        height: 2px;
+        background: linear-gradient(90deg, #ff6b81, #feca57);
+    }
+
+    /* 品牌區 */
+    .footer-brand h3 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+        background: linear-gradient(90deg, #ff6b81, #feca57);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .footer-brand p {
+        color: #a4b0be;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 1.25rem;
+    }
+
+    .footer-brand .brand-en {
+        color: #feca57;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    /* 統計數據 */
+    .footer-stats {
+        display: flex;
+        gap: 1.5rem;
+    }
+
+    .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .stat-item .stat-number {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: #ff6b81;
+        line-height: 1;
+    }
+
+    .stat-item .stat-label {
+        font-size: 0.8rem;
+        color: #a4b0be;
+    }
+
+    /* 快速連結 */
+    .footer-links ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .footer-links li {
+        margin-bottom: 0.6rem;
+    }
+
+    .footer-links a {
+        color: #a4b0be;
+        text-decoration: none;
+        transition: all 0.25s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-size: 0.95rem;
+    }
+
+    .footer-links a:hover {
+        color: #ff6b81;
+        gap: 0.85rem;
+    }
+
+    .footer-links a i {
+        font-size: 0.85rem;
+        color: #ff6b81;
+        width: 18px;
+        text-align: center;
+    }
+
+    /* 社群連結 */
+    .social-links {
+        display: flex;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+    }
+
+    .social-link {
+        width: 38px;
+        height: 38px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.08);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        transition: all 0.25s ease;
+    }
+
+    .social-link:hover {
+        transform: translateY(-3px);
+    }
+
+    .social-link.facebook:hover {
+        background: #1877f2;
+    }
+
+    .social-link.instagram:hover {
+        background: linear-gradient(45deg, #f09433, #dc2743, #cc2366, #bc1888);
+    }
+
+    .social-link.threads:hover {
+        background: #000;
+    }
+
+    .social-link.pixnet:hover {
+        background: #e67e22;
+    }
+
+    .social-link i {
+        font-size: 0.95rem;
+    }
+
+    /* 訂閱區塊 */
+    .footer-subscribe .subscribe-desc {
+        color: #a4b0be;
+        font-size: 0.85rem;
+        line-height: 1.5;
+        margin-bottom: 1rem;
+    }
+
+    .subscribe-form {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .subscribe-form input {
+        flex: 1;
+        padding: 0.65rem 1rem;
+        border: 1.5px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.08);
+        color: #fff;
+        font-size: 0.9rem;
+        transition: all 0.25s ease;
+    }
+
+    .subscribe-form input:focus {
+        outline: none;
+        border-color: #ff6b81;
+        background: rgba(255, 255, 255, 0.12);
+    }
+
+    .subscribe-form input::placeholder {
+        color: #747d8c;
+    }
+
+    .subscribe-form button {
+        padding: 0.65rem 1.15rem;
+        background: linear-gradient(135deg, #ff6b81, #feca57);
+        border: none;
+        border-radius: 8px;
+        color: #2d3436;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.25s ease;
+    }
+
+    .subscribe-form button:hover {
+        transform: scale(1.02);
+        box-shadow: 0 4px 12px rgba(255, 107, 129, 0.25);
+    }
+
+    /* Footer 底部 */
+    .footer-bottom {
+        background: rgba(0, 0, 0, 0.25);
+        padding: 1.25rem 0;
+    }
+
+    .footer-bottom .copyright {
+        text-align: center;
+        margin: 0;
+    }
+
+    .footer-bottom p {
+        color: #747d8c;
+        font-size: 0.85rem;
+        margin: 0;
+    }
+
+    .footer-bottom .heart {
+        color: #ff6b81;
+        animation: heartbeat 1.5s ease-in-out infinite;
+    }
+
+    @keyframes heartbeat {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.15); }
+    }
+
+    /* 響應式設計 */
+    @media (max-width: 992px) {
+        .footer-brand h3 {
+            font-size: 1.35rem;
+        }
+
+        .footer-section h4 {
+            font-size: 0.95rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .site-footer {
+            padding: 2rem 0 0;
+        }
+
+        .footer-main > .row > div {
+            margin-bottom: 1.5rem;
+        }
+
+        .subscribe-form {
+            flex-direction: column;
+        }
+
+        .footer-decoration {
+            display: none;
+        }
+
+        .social-links {
+            justify-content: center;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .footer-brand h3 {
+            font-size: 1.25rem;
+        }
+
+        .footer-stats {
+            gap: 1rem;
+            justify-content: flex-start;
+        }
+
+        .stat-item {
+            justify-content: flex-start;
+        }
+    }
+</style>
+
+<footer class="site-footer">
+    <!-- 裝飾元素 -->
+    <div class="footer-decoration footer-decoration-1"></div>
+    <div class="footer-decoration footer-decoration-2"></div>
+
+    <div class="container">
+        <div class="row footer-main">
+            <!-- 品牌資訊 -->
+            <div class="col-md-4">
+                <div class="footer-section footer-brand">
+                    <h3>🧪 思思實驗室</h3>
+                    <p>{{ .Site.Params.brandTagline }}</p>
+                    <p class="brand-en">{{ .Site.Params.brandTaglineEn }}</p>
+
+                    <!-- 統計數據 -->
+                    <div class="footer-stats">
+                        <div class="stat-item">
+                            <span class="stat-number">{{ len .Site.RegularPages }}+</span>
+                            <span class="stat-label">文章</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">{{ len .Site.Taxonomies.categories }}</span>
+                            <span class="stat-label">分類</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">{{ len .Site.Taxonomies.tags }}+</span>
+                            <span class="stat-label">標籤</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 快速連結 -->
+            <div class="col-md-4">
+                <div class="footer-section footer-links">
+                    <h4>快速連結</h4>
+                    <ul>
+                        <li><a href="/"><i class="fas fa-home"></i> 首頁</a></li>
+                        <li><a href="/categories"><i class="fas fa-th-large"></i> 全部分類</a></li>
+                        <li><a href="/tags"><i class="fas fa-tags"></i> 標籤雲</a></li>
+                        <li><a href="/about"><i class="fas fa-user"></i> 關於思思</a></li>
+                        <li><a href="mailto:{{ .Site.Params.email }}"><i class="fas fa-envelope"></i> 聯絡我們</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 社群與訂閱 -->
+            <div class="col-md-4">
+                <div class="footer-section footer-subscribe">
+                    <h4>訂閱電子報</h4>
+                    <p class="subscribe-desc">獲得最新好物推薦與獨家優惠！</p>
+                    <form class="subscribe-form" action="#" method="post">
+                        <input type="email" placeholder="輸入您的 Email..." required>
+                        <button type="submit">訂閱</button>
+                    </form>
+                </div>
+
+                <div class="footer-section footer-social">
+                    <h4>追蹤思思</h4>
+                    <div class="social-links">
+                        <a href="{{ .Site.Params.facebook }}" class="social-link facebook" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://instagram.com/{{ .Site.Params.instagram }}" class="social-link instagram" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://threads.net/{{ .Site.Params.threads }}" class="social-link threads" target="_blank" rel="noopener noreferrer">
+                            <i class="fa-solid fa-at"></i>
+                        </a>
+                        <a href="https://{{ .Site.Params.pixnet }}.pixnet.net/blog" class="social-link pixnet" target="_blank" rel="noopener noreferrer">
+                            <i class="fas fa-pencil-alt"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer 底部 -->
+    <div class="footer-bottom">
+        <div class="container">
+            <div class="copyright">
+                <p>© {{ now.Format "2006" }} 思思實驗室 | 用 <span class="heart">❤️</span> 挑選生活好物</p>
+            </div>
+        </div>
+    </div>
+</footer>

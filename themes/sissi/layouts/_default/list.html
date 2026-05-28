@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ .Title }} - {{ .Site.Title }}</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #ff6b9d;
+      --dark: #2d3748;
+      --light: #fafbfc;
+    }
+    body { font-family: sans-serif; line-height: 1.6; background: var(--light); }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+    header { background: linear-gradient(135deg, var(--primary) 0%, #667eea 100%); color: white; padding: 1rem 0; }
+    .header-content { display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-size: 1.5rem; font-weight: bold; color: white; text-decoration: none;}
+    nav ul { display: flex; list-style: none; gap: 1rem; }
+    nav a { color: white; text-decoration: none; }
+    main { padding: 2rem 0; }
+    .card { background: white; padding: 1.5rem; margin-bottom: 1rem; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .card h2 { margin-bottom: 0.5rem; }
+    .card h2 a { color: var(--dark); text-decoration: none; }
+    .meta { font-size: 0.9rem; color: #718096; }
+    .tags { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
+    .tag { background: var(--primary); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; text-decoration: none; font-size: 0.8rem; }
+    footer { background: var(--dark); color: white; padding: 2rem 0; margin-top: 3rem; text-align: center; }
+    .page-title { text-align: center; margin-bottom: 2rem; color: var(--dark); }
+    @media (max-width: 768px) {
+      .header-content { flex-direction: column; gap: 1rem; }
+      nav ul { flex-wrap: wrap; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <a href="/" class="logo"><i class="fas fa-flask"></i> {{ .Site.Title }}</a>
+        <nav>
+          <ul>
+            {{ range .Site.Menus.main }}
+              <li><a href="{{ .URL }}">{{ .Pre | safeHTML }} {{ .Name }}</a></li>
+            {{ end }}
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1 class="page-title">{{ .Title }}</h1>
+
+      {{ if .Content }}
+        <div class="card" style="margin-bottom: 2rem;">
+          {{ .Content }}
+        </div>
+      {{ end }}
+
+      {{ if .Pages }}
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem;">
+          {{ range .Pages }}
+            <article class="card">
+              <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+              <div class="meta"><i class="far fa-calendar-alt"></i> {{ .PublishDate.Format "2006-01-02" }}</div>
+              {{ if .Params.tags }}
+                <div class="tags">
+                  {{ range .Params.tags }}
+                    <a href="/tags/{{ . | urlize }}" class="tag">#{{ . }}</a>
+                  {{ end }}
+                </div>
+              {{ end }}
+              <p>{{ .Summary }}</p>
+            </article>
+          {{ end }}
+        </div>
+      {{ end }}
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; {{ now.Year }} 思思實驗室</p>
+    </div>
+  </footer>
+</body>
+</html>

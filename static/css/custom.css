@@ -1,0 +1,642 @@
+/* 思思實驗室 - 完整樣式 */
+
+/* 基礎設定 */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  line-height: 1.6;
+  color: var(--text-color);
+  padding-top: 70px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  line-height: 1.3;
+  margin-bottom: 1rem;
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--secondary-color);
+}
+
+/* 導航欄 */
+.navbar-brand {
+  font-weight: 600;
+}
+
+.navbar-logo {
+  margin-right: 0.5rem;
+}
+
+.navbar-brand-text {
+  color: var(--text-color);
+}
+
+/* Hero 區塊 */
+.hero {
+  background: linear-gradient(135deg, #ff6b81 0%, #feca57 100%);
+  color: white;
+  padding: 80px 0;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.hero p {
+  font-size: 1.25rem;
+  opacity: 0.9;
+}
+
+.hero-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.hero-description {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
+.hero-cta {
+  margin-top: 2rem;
+}
+
+.explore-btn {
+  background: white;
+  color: var(--primary-color);
+  border: none;
+  padding: 12px 32px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.explore-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  color: var(--secondary-color);
+}
+
+/* 分類卡片 */
+.featured-categories {
+  padding: 40px 0;
+  background-color: var(--light-color);
+}
+
+.category-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+}
+
+.category-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-hover);
+}
+
+.category-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #ff6b81 0%, #feca57 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  color: white;
+  font-size: 1.5rem;
+}
+
+.category-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.category-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.category-count {
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin-bottom: 0;
+}
+
+/* 文章卡片 */
+.card {
+  border: none;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  background: white;
+}
+
+.article-card {
+  border: none;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.article-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-hover);
+}
+
+.article-card .card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* 文章卡片等高底部推擠 */
+.card-body .read-more {
+  margin-top: auto;
+}
+
+.card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  height: 100%;
+}
+
+.card-img-top {
+  height: 200px;
+  object-fit: cover;
+}
+
+.article-tags {
+  margin-bottom: 12px;
+}
+
+.badge {
+  font-weight: 500;
+  padding: 0.35em 0.65em;
+  margin-right: 0.35em;
+  border-radius: 0.25rem;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.badge a {
+  color: white !important;
+  text-decoration: none;
+}
+
+.bg-primary {
+  background-color: var(--primary-color) !important;
+}
+
+.bg-secondary {
+  background-color: var(--secondary-color) !important;
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.4;
+}
+
+.card-text {
+  color: #666;
+  margin-bottom: 1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.5;
+  font-size: 0.9rem;
+}
+
+.article-meta {
+  display: flex;
+  gap: 1rem;
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.article-meta span {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.read-more {
+  color: var(--primary-color);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* 分區標題 */
+.section-title {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: var(--text-color);
+}
+
+/* 關於思思 */
+.about-section {
+  background-color: var(--light-color);
+  padding: 60px 0;
+  margin-top: 40px;
+}
+
+.about-image {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.about-image img {
+  width: 200px;
+  height: 200px;
+  border: 4px solid white;
+  box-shadow: var(--shadow);
+}
+
+.about-content {
+  line-height: 1.8;
+}
+
+.about-features {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.feature-item i {
+  font-size: 1.5rem;
+}
+
+/* 文章頁面 */
+.article-header {
+  margin-bottom: 2rem;
+}
+
+.article-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+}
+
+.article-meta {
+  display: flex;
+  gap: 1.5rem;
+  color: #6c757d;
+  font-size: 0.95rem;
+  flex-wrap: wrap;
+}
+
+.article-meta i {
+  margin-right: 0.25rem;
+}
+
+.article-image {
+  margin: 2rem 0;
+}
+
+.article-image img {
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+
+.article-categories,
+.article-tags {
+  margin-bottom: 1rem;
+}
+
+.article-content {
+  font-size: 1.125rem;
+  line-height: 1.8;
+}
+
+.article-content h2 {
+  font-size: 1.75rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.article-content h3 {
+  font-size: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.article-content p {
+  margin-bottom: 1.5rem;
+}
+
+/* 產品 CTA */
+.product-cta {
+  text-align: center;
+  margin: 3rem 0;
+  padding: 2rem;
+  background: linear-gradient(135deg, #ff6b81 0%, #feca57 100%);
+  border-radius: 12px;
+}
+
+.product-btn {
+  background: white;
+  color: var(--primary-color);
+  border: none;
+  padding: 15px 40px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  color: var(--secondary-color);
+}
+
+/* 分享按鈕 */
+.share-buttons {
+  text-align: center;
+  margin: 2rem 0;
+  padding: 2rem;
+  background-color: var(--light-color);
+  border-radius: 12px;
+}
+
+.share-buttons h4 {
+  margin-bottom: 1.5rem;
+}
+
+.share-buttons .btn {
+  margin: 0.25rem;
+  padding: 0.5rem 1rem;
+}
+
+/* 相關文章 */
+.related-articles-section {
+  margin-top: 3rem;
+  padding: 2rem;
+  background-color: var(--light-color);
+  border-radius: 12px;
+}
+
+.related-article-card {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s ease;
+}
+
+.related-article-card:hover {
+  transform: translateY(-3px);
+}
+
+.related-article-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.related-article-image {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+}
+
+.related-article-card h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 1rem 1rem 0.5rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.related-article-card small {
+  display: block;
+  margin: 0 1rem 1rem;
+  color: #6c757d;
+}
+
+/* 頁面頭部 */
+.page-header {
+  text-align: center;
+  margin: 2rem 0 3rem;
+}
+
+.page-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.page-description {
+  font-size: 1.125rem;
+  color: #6c757d;
+  margin-top: 1rem;
+}
+
+/* 頁腳 */
+.site-footer {
+  background-color: var(--dark-color);
+  color: white;
+  padding: 3rem 0 1rem;
+  margin-top: 4rem;
+}
+
+.footer-logo {
+  margin-right: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.footer-brand h4 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.footer-brand p {
+  margin-bottom: 0.5rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.footer-links,
+.footer-social {
+  margin-bottom: 2rem;
+}
+
+.footer-links h4,
+.footer-social h4 {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+.footer-links ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-links li {
+  margin-bottom: 0.75rem;
+}
+
+.footer-links a {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.footer-links a:hover {
+  color: white;
+}
+
+.social-links {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.social-link {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  transition: background 0.3s ease;
+}
+
+.social-link:hover {
+  background: var(--primary-color);
+  color: white;
+}
+
+.rss-link {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.rss-link:hover {
+  color: white;
+}
+
+.footer-bottom {
+  margin-top: 3rem;
+}
+
+.footer-bottom hr {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.copyright {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.copyright p {
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.5rem;
+  }
+
+  .article-title {
+    font-size: 1.75rem;
+  }
+
+  .about-features {
+    flex-direction: column;
+  }
+
+  .share-buttons .btn {
+    padding: 0.4rem 0.8rem;
+  }
+}
+
+/* 分頁 */
+.pagination {
+  margin-top: 2rem;
+}
+
+.pagination .page-link {
+  color: var(--primary-color);
+}
+
+.pagination .page-item.active .page-link {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+/* 工具類 */
+.truncate-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  min-height: 2.7em;
+}
+
+/* 麵包屑 */
+.breadcrumb {
+  background-color: transparent;
+  padding: 1rem 0;
+  margin-bottom: 0;
+}
+
+.breadcrumb-item a {
+  color: var(--primary-color);
+}

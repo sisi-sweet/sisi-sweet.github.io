@@ -1,0 +1,56 @@
+{{ define "main" }}
+<header>
+  <div class="container">
+    <div class="header-content">
+      <a href="/" class="logo"><i class="fas fa-flask"></i> {{ .Site.Title }}</a>
+      <nav>
+        <ul>
+          {{ range .Site.Menus.main }}
+            <li><a href="{{ .URL }}">{{ .Pre | safeHTML }} {{ .Name }}</a></li>
+          {{ end }}
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="container">
+    <h1>{{ .Site.Params.brandTagline }}</h1>
+    <p>{{ .Site.Params.description }}</p>
+  </div>
+</div>
+
+<main>
+  <div class="container">
+    {{ $posts := where .Site.RegularPages "Type" "in" (slice "posts" "3c-reviews" "home-living" "beauty" "food") }}
+    {{ if $posts }}
+      {{ range first 6 $posts }}
+        <article class="card">
+          <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+          <div class="meta"><i class="far fa-calendar-alt"></i> {{ .PublishDate.Format "2006-01-02" }}</div>
+          {{ if .Params.tags }}
+            <div class="tags">
+              {{ range .Params.tags }}
+                <a href="/tags/{{ . | urlize }}" class="tag">#{{ . }}</a>
+              {{ end }}
+            </div>
+          {{ end }}
+          <p>{{ .Summary }}</p>
+        </article>
+      {{ end }}
+    {{ else }}
+      <div class="card" style="text-align: center; padding: 3rem;">
+        <h3>還沒有文章喔！</h3>
+        <p>敬請期待思思實驗室即將推出的好物評測內容。</p>
+      </div>
+    {{ end }}
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <p>{{ now.Year }} 思思實驗室</p>
+  </div>
+</footer>
+{{ end }}

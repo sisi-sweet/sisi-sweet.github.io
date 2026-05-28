@@ -1,0 +1,15 @@
+/* 思思實驗室 - 基礎樣式 */
+
+/* 變數 */
+:root {
+  --primary-color: #ff6b81;
+  --secondary-color: #feca57;
+  --text-color: #333;
+  --light-color: #f8f9fa;
+  --dark-color: #343a40;
+  --border-color: #dee2e6;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* 完整樣式會在 custom.css 中定義 */

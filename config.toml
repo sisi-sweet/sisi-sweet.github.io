@@ -1,0 +1,93 @@
+baseURL = "http://localhost:1313/"
+title = "思思實驗室 | sissi Lab - 2026最值得收購的好物推薦平台"
+theme = "sissi"
+
+[taxonomies]
+  category = "categories"
+  tag = "tags"
+
+# 思思實驗室基本資訊
+[params]
+  description = "專業研究、誠實推薦、親切分享。"
+  author = "思思"
+  authorBio = "大家好，我是思思～我是好物研究員，喜歡探索、搜尋、發現新事物，再把發現的好東西分享給大家！"
+  authorImage = "/images/avator.png"
+  logo = "/images/logo.png"
+
+  # 品牌標語
+  brandTagline = "思思實驗室，為你挑選生活好物"
+  brandTaglineEn = "sissi Lab - Good Goods for You"
+
+  # 聯絡資訊
+  email = "contact@sissilab.com"
+  facebook = ""
+  instagram = "sissi.lab"
+  threads = "@sissilab"
+  pixnet = "your-pixnet-id"
+
+  # 行銷設定
+  momoAffiliateId = "your-affiliate-id"
+
+  # 社交媒體連結
+  social = [
+    { name = "Facebook", url = "#" },
+    { name = "Instagram", url = "#" },
+    { name = "Threads", url = "#" },
+    { name = "GitHub", url = "#" }
+  ]
+
+  # 開發者設定
+  devMode = false
+
+  # 分頁設定
+  paginate = 6
+  paginatePath = "page"
+
+  # 記憶體內分頁設定，提升效能
+  [sitemap]
+    changefreq = "weekly"
+    filename = "sitemap.xml"
+    priority = 0.5
+
+  # 分析設定
+  googleAnalyticsID = ""
+
+  # SEO 設定
+  schemaOrg = true
+  openGraph = true
+
+  # 網站地圖設定
+  sitemap = true
+
+# 選單設定 - 簡化版
+[menu]
+  [[menu.main]]
+    name = "分類"
+    url = "/categories"
+    weight = 1
+    pre = '<i class="fas fa-th-large"></i>'
+
+  [[menu.main]]
+    name = "關於思思"
+    url = "/about"
+    weight = 2
+    pre = '<i class="fas fa-user"></i>'
+
+# 內格式設定
+[markup]
+  defaultMarkdownHandler = "goldmark"
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+  [markup.highlight]
+    style = "github"
+  [markup.tableOfContents]
+    endLevel = 3
+    ordered = false
+    startLevel = 2
+
+# 輸出設定
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+  section = ["HTML", "RSS"]
+  page = ["HTML", "RSS"]
