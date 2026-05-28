@@ -1,6 +1,6 @@
 ---
 title: "2026年最值得入手的热血应援T恤｜Lami Fans TEAM TAIWAN 美国棉T恤深度评测"
-date: 2026-03-31T10:30:00+08:00
+date: 2026-05-29T10:30:00+08:00
 description: "想找一件能支持台湾又能日常穿的T恤吗？sissi 思思深入分析 Lami Fans TEAM TAIWAN T恤，从 GILDAN 品质认证、美国棉质感到应援与日常穿搭，一次告诉你为什么这款T恤值得关注。"
 categories: ["clothing", "3c-reviews"]
 tags: ["热血应援", "T恤推荐", "美国棉", "GILDAN认证", "台湾精神", "穿搭指南", "情侣穿搭"]
